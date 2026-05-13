@@ -2,7 +2,7 @@
 
 A lightweight, highly customizable Python script that sends a personalized daily weather briefing directly to your phone using [ntfy.sh](https://ntfy.sh/). 
 
-Instead of burying you in raw numbers, this script gives you **action-oriented advice**: it tells you exactly what to wear for your specific commute times, warns you if you need an umbrella, and reminds you to grab sunglasses if the UV index is high.
+Instead of burying you in raw numbers, this script gives you **action-oriented advice**: it tells you exactly what to wear for your specific commute times, warns you if you need an umbrella, and reminds you to grab sunglasses if it's glaringly sunny or the UV is high.
 
 **Best of all: It uses ZERO external dependencies.** Just standard Python 3.
 
@@ -17,7 +17,7 @@ Instead of burying you in raw numbers, this script gives you **action-oriented a
 ## 🚀 Installation & Setup
 
 1. **Download the ntfy app** on your iOS or Android device.
-2. **Subscribe to a new topic** in the app. Pick a unique, secret name (e.g., `alex_weather_secret_99`).
+2. **Subscribe to a new topic** in the app. Pick a unique, secret name (e.g., `my_secret_weather_alerts`).
 3. **Clone this repository:**
    ```bash
    git clone [https://github.com/YOUR_USERNAME/personal-weather-briefing.git](https://github.com/YOUR_USERNAME/personal-weather-briefing.git)
@@ -65,12 +65,25 @@ python weather_notifier.py \
 | `--evening` | `21` | The hour (0-23) of your evening plans/walk. |
 | `--tolerance`| `0` | Your cold tolerance (see guide below). |
 
+---
+
+## 🧠 Under the Hood (How the Logic Works)
+
+Curious about exactly *when* the script tells you to bring an umbrella or wear sunglasses? Here are the exact triggers used in the code:
+
+### ⚠️ "Heads Up" Warning Triggers
+*   **☔ Umbrella:** Triggered if any hourly precipitation probability is **>= 50%**. It will also tell you the exact hour the heavy rain starts.
+*   **🕶️ High UV:** Triggered if the daily max UV Index is **> 7**. Recommends sunglasses and sunscreen.
+*   **🕶️ Glaring Sun:** Triggered if the daily sunshine duration is **> 7 hours**. Recommends sunglasses even if the UV index is low (useful for winter driving).
+*   **🥵 Extreme Heat:** Triggered if the "feels like" (apparent) temperature is **> 32°C**. Reminds you to stay hydrated.
+*   **🌪️ Very Windy:** Triggered if max wind gusts exceed **40 km/h**. Warns you not to spend time doing your hair.
+*   **🌬️ Breezy:** Triggered if max wind gusts exceed **25 km/h**.
+*   **🧅 Dress in Layers:** Triggered if the daily minimum temperature is **< 10°C** AND the maximum is **> 22°C** (huge temperature swing between morning and afternoon).
+
 ### 🌡️ Cold Tolerance Guide (`--tolerance`)
 Not sure what to set for your tolerance? The script calculates a "perceived outfit temperature" by adding this number to the actual temperature. 
 
-Here is a quick reference to help you choose:
-
-*   `+5` **("Viking" mode):** You run hot. You wear shorts when others wear jackets. The script will suggest t-shirts much earlier.
+*   `+5` **("Viking" mode):** You run hot. You wear shorts when others wear jackets.
 *   `+2` **(Warm-blooded):** You prefer fewer layers and rarely feel the chill.
 *   `0` **(Default):** Standard clothing suggestions based on the exact temperature:
     *   **Below 5°C:** 🧥 Winter coat, beanie, scarf
@@ -79,7 +92,10 @@ Here is a quick reference to help you choose:
     *   **18°C to 23°C:** 👕 T-shirt / Long-sleeve
     *   **24°C and above:** 🩳 Shorts, light summer clothes
 *   `-3` **(Easily chilled):** You reach for a sweater as soon as a cloud covers the sun.
-*   `-5` **(Always freezing):** You sleep in fluffy socks. The script will tell you to grab a winter coat and a scarf much earlier than a standard weather app would.
+*   `-5` **(Always freezing):** You sleep in fluffy socks. The script will tell you to grab a winter coat much earlier.
+
+### 😎 Comfort Score
+The script calculates a daily Comfort Score out of 100. It deducts points for heavy rain probabilities, strong winds, high UV indices, extreme heat (feels like > 30°C), and extreme cold (feels like < 5°C).
 
 ---
 
