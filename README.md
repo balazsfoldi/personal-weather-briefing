@@ -20,9 +20,10 @@ Instead of burying you in raw numbers, this script gives you **action-oriented a
 2. **Subscribe to a new topic** in the app. Pick a unique, secret name (e.g., `alex_weather_secret_99`).
 3. **Clone this repository:**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/personal-weather-briefing.git
+   git clone [https://github.com/YOUR_USERNAME/personal-weather-briefing.git](https://github.com/YOUR_USERNAME/personal-weather-briefing.git)
    cd personal-weather-briefing
-   ```
+   
+```
 
 ---
 
@@ -62,7 +63,23 @@ python weather_notifier.py \
 | `--morning` | `8` | The hour (0-23) you leave for work/school. |
 | `--afternoon`| `17` | The hour (0-23) you usually head back home. |
 | `--evening` | `21` | The hour (0-23) of your evening plans/walk. |
-| `--tolerance`| `0` | Your cold tolerance. Use `-5` if you get cold easily (suggests warmer clothes). Use `+5` if you run hot. |
+| `--tolerance`| `0` | Your cold tolerance (see guide below). |
+
+### 🌡️ Cold Tolerance Guide (`--tolerance`)
+Not sure what to set for your tolerance? The script calculates a "perceived outfit temperature" by adding this number to the actual temperature. 
+
+Here is a quick reference to help you choose:
+
+*   `+5` **("Viking" mode):** You run hot. You wear shorts when others wear jackets. The script will suggest t-shirts much earlier.
+*   `+2` **(Warm-blooded):** You prefer fewer layers and rarely feel the chill.
+*   `0` **(Default):** Standard clothing suggestions based on the exact temperature:
+    *   **Below 5°C:** 🧥 Winter coat, beanie, scarf
+    *   **5°C to 11°C:** 🧥 Jacket / Coat
+    *   **12°C to 17°C:** 🧥 Sweater or light jacket
+    *   **18°C to 23°C:** 👕 T-shirt / Long-sleeve
+    *   **24°C and above:** 🩳 Shorts, light summer clothes
+*   `-3` **(Easily chilled):** You reach for a sweater as soon as a cloud covers the sun.
+*   `-5` **(Always freezing):** You sleep in fluffy socks. The script will tell you to grab a winter coat and a scarf much earlier than a standard weather app would.
 
 ---
 
@@ -73,15 +90,15 @@ To get a true "Daily Briefing", you should automate this script to run every mor
 ### 🐧 Linux (Using Cron)
 
 1. Open your terminal and edit your crontab:
-   
-```bash
+   ```bash
    crontab -e
-   ```
-2. Add the following line to run the script every day at 6:30 AM. Make sure to provide the **absolute paths** to both Python and your script:
    
-```bash
+```
+2. Add the following line to run the script every day at 6:30 AM. Make sure to provide the **absolute paths** to both Python and your script:
+   ```bash
    30 6 * * * /usr/bin/python3 /home/yourusername/personal-weather-briefing/weather_notifier.py --channel "your_secret_channel" --name "Alex" --morning 7 --tolerance -5
-   ```
+   
+```
 3. Save and exit. Cron will now handle the rest!
 
 *Tip: If you prefer using Environment Variables instead of the `--channel` flag, you can structure your cron job like this:*
@@ -98,10 +115,10 @@ To get a true "Daily Briefing", you should automate this script to run every mor
 5. **Action:** Select **Start a program**.
 6. **Program/script:** Type `python` (or the full path to your `python.exe` if it's not in your PATH, e.g., `C:\Python39\python.exe`).
 7. **Add arguments:** Paste your customized flags here. Example:
-   
-```text
+   ```text
    weather_notifier.py --channel "your_secret_channel" --name "Alex" --city "London"
-   ```
+   
+```
 8. **Start in:** Paste the exact path to the folder where you cloned the script (e.g., `C:\Users\YourName\Scripts\personal-weather-briefing\`). *Do not put quotes around this path.*
 9. Click **Finish**. 
 
